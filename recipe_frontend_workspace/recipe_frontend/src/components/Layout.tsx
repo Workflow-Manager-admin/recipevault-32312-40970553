@@ -22,11 +22,14 @@ export const AppLayout: React.FC<{
         }}
       />
       <main
+        tabIndex={-1}
+        aria-label="Main content area"
         style={{
           marginLeft: 0,
           minHeight: "calc(100vh - 56px)",
           background: "#FAFAFA",
-          padding: "24px 16px 40px 16px",
+          padding: "2.1rem 1rem 2.7rem 1rem",
+          outline: "none"
         }}
       >
         {children}
