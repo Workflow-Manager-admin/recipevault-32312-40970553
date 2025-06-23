@@ -27,9 +27,22 @@ urlpatterns = [
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="My API",
+        title="RecipeVault API",
         default_version='v1',
-        description="Test description",
+        description=(
+            "API documentation for RecipeVault - Manage recipes, users, profiles, "
+            "and authentication."
+        ),
+        contact=openapi.Contact(
+            email=(
+                "admin@recipevault.local"
+            )
+        ),
+        license=openapi.License(
+            name=(
+                "MIT License"
+            )
+        ),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
