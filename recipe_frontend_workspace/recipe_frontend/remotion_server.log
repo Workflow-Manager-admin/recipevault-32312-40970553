@@ -2,23 +2,6 @@
 > remotion@1.0.0 dev
 > remotion studio  --host 0.0.0.0 --port 3000
 
-Server ready - Local: http://localhost:3000, Network: http://172.17.0.2:3000
-Built in 2113ms
-Building...
-WARNING in ./src/Root.tsx 12:19-29
-export 'HelloWorld' (imported as 'HelloWorld') was not found in './HelloWorld' (possible exports: default)
-WARNING in ./src/Root.tsx 17:16-28
-export 'myCompSchema' (imported as 'myCompSchema') was not found in './HelloWorld' (possible exports: default)
-Built in 353ms
-Building...
-Built in 428ms
-Building...
-Built in 302ms
-Building...
-Built in 264ms
-Building...
-Built in 223ms
-Building...
-Built in 261ms
-Building...
-Built in 63ms
+
+Error: You specified port 3000 to be used for the HTTP server, but it is not available. Choose a different port or remove the setting to let Remotion automatically select a free port.
+    at Object.getDesiredPort (/home/kavia/workspace/code-generation/recipevault-32312-40970553/recipe_frontend_workspace/recipe_frontend/node_modules/@remotion/renderer/dist/get-port.js:65:15)

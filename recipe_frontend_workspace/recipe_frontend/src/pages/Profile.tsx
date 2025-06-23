@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "../theme";
-
-// Dummy user data
-const user = {
-  name: "Jamie Oliver",
-  email: "jamie@email.com",
-};
+import { fetchProfile, updateProfile } from "../services/api";
 
 // PUBLIC_INTERFACE
 export const Profile: React.FC = () => {
   const { colors } = useTheme();
+  const [profile, setProfile] = useState<{ name: string; email: string } | null>(null);
+  const [edit, setEdit] = useState(false);
+  const [name, setName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchProfile()
+      .then((user) => {
+        setProfile(user);
+        setName(user.name);
+      })
+      .catch(() => setError("Failed to load profile"));
+  }, []);
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setError(null);
+    try {
+      const updated = await updateProfile({ name });
+      setProfile(updated);
+      setEdit(false);
+    } catch {
+      setError("Error updating profile");
+    }
+    setSaving(false);
+  }
+
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  if (!profile)
+    return (
+      <div style={{ color: colors.textSecondary, textAlign: "center" }}>
+        Loading...
+      </div>
+    );
 
   return (
     <section style={{
@@ -22,12 +53,78 @@ export const Profile: React.FC = () => {
       padding: "22px 18px",
     }}>
       <h2 style={{ color: colors.primary, marginBottom: 16 }}>Profile</h2>
-      <div>
-        <strong>Name:</strong> {user.name}
-      </div>
-      <div>
-        <strong>Email:</strong> {user.email}
-      </div>
+      {edit ? (
+        <form onSubmit={handleSave}>
+          <div style={{ marginBottom: 12 }}>
+            <strong>Name:</strong>{" "}
+            <input
+              value={name}
+              onChange={e => setName(e.target.value)}
+              style={{
+                border: `1px solid ${colors.border}`,
+                borderRadius: 4,
+                padding: 6,
+              }}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <strong>Email:</strong> {profile.email}
+          </div>
+          <button
+            type="submit"
+            style={{
+              background: colors.secondary,
+              color: "white",
+              padding: "6px 18px",
+              border: "none",
+              borderRadius: 5,
+              fontWeight: 500,
+              marginRight: 10,
+              cursor: "pointer",
+            }}
+            disabled={saving}
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            onClick={() => setEdit(false)}
+            style={{
+              background: "none",
+              color: colors.primary,
+              cursor: "pointer",
+              border: "none"
+            }}
+          >
+            Cancel
+          </button>
+        </form>
+      ) : (
+        <>
+          <div>
+            <strong>Name:</strong> {profile.name}
+          </div>
+          <div>
+            <strong>Email:</strong> {profile.email}
+          </div>
+          <button
+            style={{
+              marginTop: 20,
+              background: colors.secondary,
+              color: "white",
+              padding: "7px 25px",
+              border: "none",
+              borderRadius: 5,
+              fontWeight: 600,
+              cursor: "pointer"
+            }}
+            onClick={() => setEdit(true)}
+          >
+            Edit
+          </button>
+        </>
+      )}
     </section>
   );
 };
